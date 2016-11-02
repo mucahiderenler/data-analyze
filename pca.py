@@ -5,9 +5,9 @@ from sklearn.decomposition import PCA
 from sklearn import preprocessing
 
 # 0. Load Data
-f = codecs.open("pivot_player.csv", "r", "utf-8")
 names = []
 count = 0
+f = codecs.open("pivot_player.csv", "r", "utf-8")
 for line in f:
     if count > 0:
         # remove double quotes
@@ -18,7 +18,7 @@ for line in f:
             names.append(data)
     count += 1
 
-# 1. Normalization of the data
+""""# 1. Normalization of the data
 min_max_scaler = preprocessing.MinMaxScaler()
 states = min_max_scaler.fit_transform(names)
 
@@ -32,9 +32,9 @@ print(estimator.explained_variance_ratio_)
 numbers = numpy.arange(len(X_pca))
 fig, ax = plt.subplots()
 for i in range(len(X_pca)):
-    plt.text(X_pca[i][0], X_pca[i][1], numbers[i])
+    plt.text(X_pca[i][0], X_pca[i][1], '*')
 plt.xlim(-1, 4)
 plt.ylim(-1, 1)
 ax.grid(True)
 fig.tight_layout()
-plt.show()
+plt.show()"""

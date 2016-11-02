@@ -33,8 +33,9 @@ try:
 finally:
     f.close()
 
-for i in range(1,len(infos)):
-    print(infos[i])
+#for i in range(1,len(infos)):
+ ###     print(infos[i])
+#print(infos[1])
 
 
 
