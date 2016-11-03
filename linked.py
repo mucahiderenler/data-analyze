@@ -22,7 +22,7 @@ try:
     for row in reader:
         datos = []
         if row[('minutes')] == None or count == 1000 :
-            count = 0
+            break
         datos.append(row[('minutes')])
         datos.append(row[('pts')])
         datos.append(row[('reb')])
@@ -37,8 +37,8 @@ finally:
 
 print(infos)
 
-"""labels = [0 for x in range(len(infos))]
-plotdata(infos,labels,'basic')"""
+labels = [0 for x in range(len(infos))]
+plotdata(infos,labels,'basic')
 
 import sklearn.cluster
 k = 3
@@ -47,8 +47,8 @@ plotdata(infos,labels, 'kmeans')
 
 # dbscan
 # setting parameters
-"""labels = sklearn.cluster.DBSCAN(eps=0.01, min_samples=5).fit_predict(infos)
-plotdata(infos,labels, 'dbscan')"""
+labels = sklearn.cluster.DBSCAN(eps=0.01, min_samples=5).fit_predict(infos)
+plotdata(infos,labels, 'dbscan')
 
 from scipy import cluster
 dist = sklearn.neighbors.DistanceMetric.get_metric('euclidean')
