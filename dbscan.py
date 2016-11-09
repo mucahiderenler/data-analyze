@@ -2,7 +2,7 @@ import os
 import csv
 import codecs
 import matplotlib.pyplot as plt
-import numpy
+import sklearn.cluster
 
 def plotdata(data,labels,name): #def function plotdata
 #colors = ['black']
@@ -35,28 +35,40 @@ try:
 finally:
     f.close()
 
-import sklearn.cluster
+# dbscan
+# setting parameters
 
 from sklearn import preprocessing
-
 min_max_scaler = preprocessing.MinMaxScaler()
 norminfo = min_max_scaler.fit_transform(infos)
 
-# 2. Compute the similarity matrix
-dist = sklearn.neighbors.DistanceMetric.get_metric('euclidean')
-matsim = dist.pairwise(norminfo)
-avSim = numpy.average(matsim)
-print "%s\t%6.2f" % ('Average Distance', avSim)
+from sklearn.decomposition import PCA
 
-from scipy import cluster
-clusters = cluster.hierarchy.linkage(matsim, method = 'complete')
-cluster.hierarchy.dendrogram(clusters,color_threshold=0)
+estimator = PCA(n_components=2)
+X_pca = estimator.fit_transform(norminfo)
+
+# 2.1 Parametrization
+import sklearn.neighbors
+
+dist = sklearn.neighbors.DistanceMetric.get_metric('euclidean')
+matsim = dist.pairwise(X_pca)
+
+minPts = 3
+from sklearn.neighbors import kneighbors_graph
+
+A = kneighbors_graph(X_pca, minPts, include_self=False)
+Ar = A.toarray()
+
+seq = []
+for i, s in enumerate(X_pca):
+    for j in range(len(X_pca)):
+        if Ar[i][j] != 0:
+            seq.append(matsim[i][j])
+
+seq.sort()
+plt.plot(seq)
 plt.show()
 
-labels = cluster.hierarchy.fcluster(clusters, 30, criterion = 'distance')
-plotdata(infos,labels, 'hierarchical single')
 
-model = sklearn.cluster.AgglomerativeClustering(n_clusters=3,linkage="complete", affinity='euclidean')
-labels = model.fit_predict(infos)
-
-plotdata(infos,labels, 'hierarchical ward')
+labels = sklearn.cluster.DBSCAN(eps=0.84, min_samples=5).fit_predict(infos)
+plotdata(infos,labels, 'dbscan')
